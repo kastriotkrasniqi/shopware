@@ -4,44 +4,59 @@ namespace Blaze\Core\Content\ProductBundle;
 
 use Shopware\Core\Framework\DataAbstractionLayer\Entity;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityIdTrait;
+use Shopware\Core\Content\Product\ProductEntity;
+use Blaze\Core\Content\ProductBundleAssignedProducts\ProductBundleAssignedProductsCollection;
 
 class ProductBundleEntity extends Entity
 {
     use EntityIdTrait;
 
-    protected ?string $name;
+    protected ?string $productId;
+    protected ?string $title;
 
-    protected ?string $description;
+    /** @var ProductEntity|null */
+    protected ?ProductEntity $product;
 
-    protected bool $active;
+    /** @var ProductBundleAssignedProductsCollection|null */
+    protected ?ProductBundleAssignedProductsCollection $assignedProducts;
 
-    public function getName(): ?string
+    public function getProductId(): ?string
     {
-        return $this->name;
+        return $this->productId;
     }
 
-    public function setName(?string $name): void
+    public function setProductId(?string $productId): void
     {
-        $this->name = $name;
+        $this->productId = $productId;
     }
 
-    public function getDescription(): ?string
+    public function getTitle(): ?string
     {
-        return $this->description;
+        return $this->title;
     }
 
-    public function setDescription(?string $description): void
+    public function setTitle(?string $title): void
     {
-        $this->description = $description;
+        $this->title = $title;
     }
 
-    public function isActive(): bool
+    public function getProduct(): ?ProductEntity
     {
-        return $this->active;
+        return $this->product;
     }
 
-    public function setActive(bool $active): void
+    public function setProduct(?ProductEntity $product): void
     {
-        $this->active = $active;
+        $this->product = $product;
+    }
+
+    public function getAssignedProducts(): ?ProductBundleAssignedProductsCollection
+    {
+        return $this->assignedProducts;
+    }
+
+    public function setAssignedProducts(?ProductBundleAssignedProductsCollection $assignedProducts): void
+    {
+        $this->assignedProducts = $assignedProducts;
     }
 }

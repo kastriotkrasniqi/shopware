@@ -3,45 +3,32 @@
 namespace Blaze\Core\Content\ProductBundleTranslation;
 
 use Shopware\Core\Framework\DataAbstractionLayer\Entity;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityIdTrait;
+use Blaze\Core\Content\ProductBundle\ProductBundleEntity;
 
 class ProductBundleTranslationEntity extends Entity
 {
-    use EntityIdTrait;
+    protected ?string $title;
 
-    protected ?string $name;
+    /** @var ProductBundleEntity|null */
+    protected ?ProductBundleEntity $productBundle;
 
-    protected ?string $description;
-
-    protected bool $active;
-
-    public function getName(): ?string
+    public function getTitle(): ?string
     {
-        return $this->name;
+        return $this->title;
     }
 
-    public function setName(?string $name): void
+    public function setTitle(?string $title): void
     {
-        $this->name = $name;
+        $this->title = $title;
     }
 
-    public function getDescription(): ?string
+    public function getProductBundle(): ?ProductBundleEntity
     {
-        return $this->description;
+        return $this->productBundle;
     }
 
-    public function setDescription(?string $description): void
+    public function setProductBundle(?ProductBundleEntity $productBundle): void
     {
-        $this->description = $description;
-    }
-
-    public function isActive(): bool
-    {
-        return $this->active;
-    }
-
-    public function setActive(bool $active): void
-    {
-        $this->active = $active;
+        $this->productBundle = $productBundle;
     }
 }

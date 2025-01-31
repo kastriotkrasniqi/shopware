@@ -2,40 +2,28 @@
 
 namespace Blaze\Core\Content\ProductBundleTranslation;
 
-use Shopware\Core\Framework\DataAbstractionLayer\EntityDefinition;
-use Shopware\Core\Framework\DataAbstractionLayer\FieldCollection;
-use Shopware\Core\Framework\DataAbstractionLayer\Field\BoolField;
-use Shopware\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityTranslationDefinition;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
-use Shopware\Core\Framework\DataAbstractionLayer\Field\IdField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\StringField;
+use Shopware\Core\Framework\DataAbstractionLayer\FieldCollection;
+use Blaze\Core\Content\ProductBundle\ProductBundleDefinition;
 
-class ProductBundleTranslationDefinition extends EntityDefinition
+class ProductBundleTranslationDefinition extends EntityTranslationDefinition
 {
-    public const ENTITY_NAME = 'product_bundle_translation';
-
     public function getEntityName(): string
     {
-        return self::ENTITY_NAME;
+        return 'product_bundle_translation';
     }
 
-    public function getEntityClass(): string
+    public function getParentDefinitionClass(): string
     {
-        return ProductBundleTranslationEntity::class;
-    }
-
-    public function getCollectionClass(): string
-    {
-        return ProductBundleTranslationCollection::class;
+        return ProductBundleDefinition::class;
     }
 
     protected function defineFields(): FieldCollection
     {
         return new FieldCollection([
-            (new IdField('id', 'id'))->addFlags(new Required(), new PrimaryKey()),
-            (new StringField('name', 'name')),
-            (new StringField('description', 'description')),
-            (new BoolField('active', 'active'))
+            (new StringField('title', 'title'))->addFlags(new Required()),
         ]);
     }
 }
