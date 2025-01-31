@@ -6,31 +6,6 @@
 
     <services>
 
-        <service id="Blaze\Command\ExampleCommand">
-            <tag name="console.command"/>
-        </service>
-
-        <service id="Blaze\ScheduledTask\ExampleTask">
-            <tag name="shopware.scheduled.task"/>
-        </service>
-
-        <service id="Blaze\Subscriber\MySubscriber">
-            <tag name="kernel.event_subscriber"/>
-        </service>
-
-        <service id="Blaze\Storefront\Controller\ExampleController" public="true">
-            <call method="setContainer">
-                <argument type="service" id="service_container"/>
-            </call>
-            <call method="setTwig">
-                 <argument type="service" id="twig"/>
-             </call>
-        </service>
-
-        <service id="Blaze\Core\Content\Example\SalesChannel\ExampleRoute">
-            <argument type="service" id="product.repository"/>
-        </service>
-
         <service id="Blaze\Core\Content\ProductBundle\ProductBundleDefinition">
             <tag name="shopware.entity.definition" entity="product_bundle" />
         </service>
@@ -41,11 +16,6 @@
 
         <service id="Blaze\Core\Content\ProductBundleAssignedProducts\ProductBundleAssignedProductsDefinition">
             <tag name="shopware.entity.definition" entity="product_bundle_assigned_products" />
-        </service>
-
-        <service id="Blaze\Service\CustomFieldsInstaller">
-            <argument type="service" id="custom_field_set.repository"/>
-            <argument type="service" id="custom_field_set_relation.repository"/>
         </service>
 
     </services>

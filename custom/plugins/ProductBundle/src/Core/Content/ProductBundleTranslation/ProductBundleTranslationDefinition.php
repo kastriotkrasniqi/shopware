@@ -2,11 +2,13 @@
 
 namespace Blaze\Core\Content\ProductBundleTranslation;
 
-use Shopware\Core\Framework\DataAbstractionLayer\EntityTranslationDefinition;
-use Shopware\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
-use Shopware\Core\Framework\DataAbstractionLayer\Field\StringField;
-use Shopware\Core\Framework\DataAbstractionLayer\FieldCollection;
 use Blaze\Core\Content\ProductBundle\ProductBundleDefinition;
+use Shopware\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
+use Shopware\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
+use Shopware\Core\Framework\DataAbstractionLayer\Field\IdField;
+use Shopware\Core\Framework\DataAbstractionLayer\FieldCollection;
+use Shopware\Core\Framework\DataAbstractionLayer\Field\StringField;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityTranslationDefinition;
 
 class ProductBundleTranslationDefinition extends EntityTranslationDefinition
 {
@@ -14,6 +16,7 @@ class ProductBundleTranslationDefinition extends EntityTranslationDefinition
     {
         return 'product_bundle_translation';
     }
+
 
     public function getParentDefinitionClass(): string
     {
@@ -23,6 +26,7 @@ class ProductBundleTranslationDefinition extends EntityTranslationDefinition
     protected function defineFields(): FieldCollection
     {
         return new FieldCollection([
+            (new IdField('id', 'id'))->addFlags(new PrimaryKey(), new Required()),
             (new StringField('title', 'title'))->addFlags(new Required()),
         ]);
     }
