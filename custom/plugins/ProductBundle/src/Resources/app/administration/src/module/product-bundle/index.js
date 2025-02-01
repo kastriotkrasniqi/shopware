@@ -7,11 +7,9 @@ import enGB from '../../snippet/en-GB';
 
 Shopware.Module.register('product-bundle', {
     type: 'plugin',
-    name: 'Example',
+    name: 'Product Bundle',
     title: 'product-bundle.general.mainMenuItemGeneral',
     description: 'sw-property.general.descriptionTextModule',
-    color: '#ff3d58',
-    icon: 'default-shopping-paper-bag-product',
 
     snippets: {
         'de-DE': deDE,
@@ -34,7 +32,8 @@ Shopware.Module.register('product-bundle', {
             component: 'product-bundle-create',
             path: 'create',
             meta: {
-                parentPath: 'product.bundle.list'
+                parentPath: 'product.bundle.list',
+                privilege: 'product.bundle.creator',
             }
         }
     },
@@ -43,8 +42,6 @@ Shopware.Module.register('product-bundle', {
         label: 'product-bundle.general.mainMenuItemGeneral',
         color: '#ff3d58',
         path: 'product.bundle.list',
-        icon: 'default-shopping-paper-bag-product',
         parent: 'sw-catalogue',
-        position: 100
     }]
 });

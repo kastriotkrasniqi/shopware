@@ -47,7 +47,7 @@ class Migration1699999999ProductBundle extends MigrationStep
                 `id` BINARY(16) NOT NULL,
                 `bundle_id` BINARY(16) NOT NULL,
                 `product_id` BINARY(16) NOT NULL,
-                `quantity` INT NOT NULL DEFAULT 1,
+                `quantity` INT NOT NULL,
                 `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
                 `updated_at` DATETIME(3) NULL ON UPDATE CURRENT_TIMESTAMP(3),
                 PRIMARY KEY (`id`),

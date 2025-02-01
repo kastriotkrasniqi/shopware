@@ -1,8 +1,60 @@
 {
     "product-bundle": {
-        "general": {
-            "mainMenuItemGeneral": "My custom module",
-            "descriptionTextModule": "Manage this custom module here"
+      "general": {
+        "mainMenuItemList": "Product bundles",
+        "mainMenuItemGeneral": "Product bundles",
+        "placeholderSearchBar": "Search bundles...",
+        "descriptionTextModule": "Manage bunldes here."
+      },
+      "list": {
+        "textReviewOverview": "Product Bundle",
+        "columnProduct": "Product",
+        "columnPoints": "Stars",
+        "columnUser": "Customer",
+        "columnStatus": "Approved",
+        "columnCreatedAt": "Created at",
+        "columnComment": "Commented on",
+        "columnTitle": "Bundle title",
+        "columnName": "Name",
+        "placeholderSearchBar": "Search product bundles...",
+        "messageEmpty": "No product bundles yet",
+        "messageEmptySubline": "Manage product bundles here",
+        "titleSidebarItemRefresh": "Refresh",
+        "buttonAddProperty": "Add Product bundle",
+        "textProperties" : "Product Bundles"
+      },
+      "detail": {
+        "textHeadline": "Product Bundle",
+        "cardTitleReviewInfo": "Product Bundle",
+        "cardTitleReviewProperties": "Properties",
+        "labelTitle": "Title",
+        "labelPoints": "Points",
+        "labelUser": "User",
+        "labelSalesChannel": "Sales Channel",
+        "labelCreatedAt": "Created at",
+        "labelProduct": "Product",
+        "labelEmail": "Email address",
+        "labelLanguage": "Language",
+        "labelPositive": "Positive votes",
+        "labelNegative": "Negative votes",
+        "labelStatus": "Approved",
+        "labelContent": "Content",
+        "labelComment": "Comment",
+        "labelCustomer": "Customer",
+        "titleCardComment": "Comment",
+        "placeholderComment": "Enter comment...",
+        "review1PointRatingText": "Unsatisfactory",
+        "review2PointRatingText": "Acceptable",
+        "review3PointRatingText": "Good",
+        "review4PointRatingText": "Very good",
+        "review5PointRatingText": "Excellent"
+      }
+    },
+    "sw-privileges": {
+      "permissions": {
+        "review": {
+          "label": "Product Bundles"
         }
+      }
     }
-}
+  }
