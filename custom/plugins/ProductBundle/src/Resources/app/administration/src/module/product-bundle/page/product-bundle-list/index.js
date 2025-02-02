@@ -6,105 +6,77 @@ const { Criteria } = Shopware.Data;
 Shopware.Component.register('product-bundle-list', {
     template,
 
-    compatConfig: Shopware.compatConfig,
-
     inject: [
         'repositoryFactory',
-        'acl',
     ],
 
     mixins: [
-        Mixin.getByName('listing'),
+        Mixin.getByName('listing')
     ],
-
-    data() {
-        return {
-            productBundle: null,
-            sortBy: 'name',
-            isLoading: false,
-            sortDirection: 'ASC',
-            showDeleteModal: false,
-            searchConfigEntity: 'product_bundle',
-        };
-    },
 
     metaInfo() {
         return {
-            title: this.$createTitle(),
+            title: this.$createTitle()
         };
     },
 
-    computed: {
-        propertyRepository() {
-            return this.repositoryFactory.create('product_bundle');
-        },
-
-        defaultCriteria() {
-            const criteria = new Criteria(this.page, this.limit);
-
-            criteria.setTerm(this.term);
-            criteria.addSorting(Criteria.sort(this.sortBy, this.sortDirection, this.useNaturalSorting));
-
-
-            return criteria;
-        },
-
-        useNaturalSorting() {
-            return this.sortBy === 'property.name';
-        },
+    data() {
+        return {
+            productBundleRepository: this.repositoryFactory.create('product_bundle'),
+            productBundles: [],
+            columns: [
+                { property: 'name', label: 'Product Bundle Name', routerLink: 'product.bundle.detail', allowResize: true },
+            ],
+            isLoading: false,
+            total: 0,
+            criteria: new Criteria(1, 25),
+            languageId: Shopware.State.get('context').api.languageId,
+            emptyStateTitle: this.$tc('sw-product-bundle.list.emptyStateTitle'),
+            emptyStateSubline: this.$tc('sw-product-bundle.list.emptyStateSubline'),
+        };
     },
 
     methods: {
-        onDelete(id) {
-            this.showDeleteModal = id;
-        },
-
-        onCloseDeleteModal() {
-            this.showDeleteModal = false;
-        },
-
-        onConfirmDelete(id) {
-            this.showDeleteModal = false;
-
-            return this.propertyRepository.delete(id).then(() => {
-                this.getList();
-            });
-        },
-
-        onChangeLanguage() {
-            this.getList();
-        },
-
         async getList() {
             this.isLoading = true;
+            this.criteria.addAssociation('translations');
 
-            const criteria = new Criteria();
+            try {
+                console.log("Fetching product bundles...");
+                const result = await this.productBundleRepository.search(this.criteria, Shopware.Context.api);
 
-            return this.propertyRepository
-                .search(criteria)
-                .then((items) => {
-                    this.total = items.total;
-                    this.productBundle = items;
-                    this.isLoading = false;
+                console.log("Product bundles fetched:", result);
 
-                    return items;
-                })
-                .catch(() => {
-                    this.isLoading = false;
-                });
+                if (result.length === 0) {
+                    console.warn("No product bundles found.");
+                }
+
+                this.total = result.total;
+                this.productBundles = result;
+            } catch (error) {
+                console.error("Error fetching product bundles:", error.response?.data || error.message);
+                this.productBundles = [];
+            } finally {
+                this.isLoading = false;
+            }
         },
 
-        getPropertyColumns() {
-            return [
-                {
-                    property: 'name',
-                    label: 'product-bundle.list.columnName',
-                    routerLink: 'sw.property.detail',
-                    inlineEdit: 'string',
-                    allowResize: true,
-                    primary: true,
-                },
-            ];
+        onEditItem(item) {
+            this.$router.push({ name: 'product.bundle.detail', params: { id: item.id } });
         },
+
+        onCreateNewProductBundle() {
+            this.$router.push({ name: 'product.bundle.create' });
+        },
+
+        onSearch(searchTerm) {
+            this.criteria.setTerm(searchTerm);
+            this.getList(); // You would fetch the list based on the updated criteria
+        }
+
+    },
+
+    created() {
+        this.getList();
     },
 });

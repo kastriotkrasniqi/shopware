@@ -1,5 +1,5 @@
 {
-    "product-bundle": {
+    "sw-product-bundle": {
       "general": {
         "mainMenuItemList": "Product bundles",
         "mainMenuItemGeneral": "Product bundles",
@@ -17,11 +17,13 @@
         "columnTitle": "Bundle title",
         "columnName": "Name",
         "placeholderSearchBar": "Search product bundles...",
+        "textProductBundles":"Product Bundles",
         "messageEmpty": "No product bundles yet",
         "messageEmptySubline": "Manage product bundles here",
         "titleSidebarItemRefresh": "Refresh",
         "buttonAddProperty": "Add Product bundle",
-        "textProperties" : "Product Bundles"
+        "textProperties" : "Product Bundles",
+        "buttonAddBundle": "Add product bundle"
       },
       "detail": {
         "textHeadline": "Product Bundle",

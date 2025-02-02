@@ -8,7 +8,7 @@ import enGB from '../../snippet/en-GB';
 Shopware.Module.register('product-bundle', {
     type: 'plugin',
     name: 'Product Bundle',
-    title: 'product-bundle.general.mainMenuItemGeneral',
+    title: 'sw-product-bundle.general.mainMenuItemGeneral',
     description: 'sw-property.general.descriptionTextModule',
 
     snippets: {
@@ -30,16 +30,15 @@ Shopware.Module.register('product-bundle', {
         },
         create: {
             component: 'product-bundle-create',
-            path: 'create',
-            meta: {
-                parentPath: 'product.bundle.list',
-                privilege: 'product.bundle.creator',
-            }
+            path: 'create'
+            // meta: {
+            //     parentPath: 'product.bundle.list'
+            // }
         }
     },
 
     navigation: [{
-        label: 'product-bundle.general.mainMenuItemGeneral',
+        label: 'sw-product-bundle.general.mainMenuItemGeneral',
         color: '#ff3d58',
         path: 'product.bundle.list',
         parent: 'sw-catalogue',

@@ -29,7 +29,6 @@ class ProductBundleAssignedProductsDefinition extends EntityDefinition
             (new FkField('bundle_id', 'bundleId', ProductBundleDefinition::class))->addFlags(new Required()),
             (new FkField('product_id', 'productId', ProductDefinition::class))->addFlags(new Required()),
             (new IntField('quantity', 'quantity'))->addFlags(new Required()),
-
             new ManyToOneAssociationField('bundle', 'bundle_id', ProductBundleDefinition::class),
             new ManyToOneAssociationField('product', 'product_id', ProductDefinition::class),
         ]);

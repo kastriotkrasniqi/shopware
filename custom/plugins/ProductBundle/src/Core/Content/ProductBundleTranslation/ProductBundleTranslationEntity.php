@@ -2,24 +2,25 @@
 
 namespace Blaze\Core\Content\ProductBundleTranslation;
 
-use Shopware\Core\Framework\DataAbstractionLayer\Entity;
 use Blaze\Core\Content\ProductBundle\ProductBundleEntity;
+use Shopware\Core\Framework\DataAbstractionLayer\TranslationEntity;
 
-class ProductBundleTranslationEntity extends Entity
+
+class ProductBundleTranslationEntity extends TranslationEntity
 {
-    protected ?string $title;
+    protected ?string $name;
 
     /** @var ProductBundleEntity|null */
     protected ?ProductBundleEntity $productBundle;
 
-    public function getTitle(): ?string
+    public function getName(): ?string
     {
-        return $this->title;
+        return $this->name;
     }
 
-    public function setTitle(?string $title): void
+    public function setName(string $name): void
     {
-        $this->title = $title;
+        $this->name = $name;
     }
 
     public function getProductBundle(): ?ProductBundleEntity

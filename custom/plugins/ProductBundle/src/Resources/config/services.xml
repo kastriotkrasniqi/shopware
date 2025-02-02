@@ -6,6 +6,15 @@
 
     <services>
 
+        <service id="Blaze\Storefront\Controller\ProductBundleController" public="true">
+            <call method="setContainer">
+                <argument type="service" id="service_container"/>
+            </call>
+            <call method="setTwig">
+                 <argument type="service" id="twig"/>
+             </call>
+        </service>
+
         <service id="Blaze\Core\Content\ProductBundle\ProductBundleDefinition">
             <tag name="shopware.entity.definition" entity="product_bundle" />
         </service>

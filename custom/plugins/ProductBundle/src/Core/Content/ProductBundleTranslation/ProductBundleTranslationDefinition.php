@@ -17,6 +17,10 @@ class ProductBundleTranslationDefinition extends EntityTranslationDefinition
         return 'product_bundle_translation';
     }
 
+    public function getEntityClass(): string
+    {
+        return ProductBundleTranslationEntity::class;
+    }
 
     public function getParentDefinitionClass(): string
     {
@@ -26,8 +30,7 @@ class ProductBundleTranslationDefinition extends EntityTranslationDefinition
     protected function defineFields(): FieldCollection
     {
         return new FieldCollection([
-            (new IdField('id', 'id'))->addFlags(new PrimaryKey(), new Required()),
-            (new StringField('title', 'title'))->addFlags(new Required()),
+            (new StringField('name', 'name'))->addFlags(new Required()),
         ]);
     }
 }

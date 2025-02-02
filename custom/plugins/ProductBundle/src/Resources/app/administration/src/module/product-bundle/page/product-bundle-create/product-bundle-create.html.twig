@@ -1,37 +1,59 @@
-<!-- eslint-disable-next-line sw-deprecation-rules/no-twigjs-blocks -->
-{% block sw_property_detail_language_switch %}
-<!-- eslint-disable-next-line vue/valid-v-slot -->
-<template #language-switch>
-    <sw-language-switch disabled />
-</template>
-{% endblock %}
-
-<!-- eslint-disable-next-line sw-deprecation-rules/no-twigjs-blocks -->
-{% block sw_property_detail_content_language_info %}
-<sw-language-info
-    :entity-description="placeholder(productBundle, 'name', $tc('sw-property.detail.textHeadline'))"
-    is-new-entity
-/>
-{% endblock %}
-
-<!-- eslint-disable-next-line sw-deprecation-rules/no-twigjs-blocks -->
-{% block sw_property_detail_content_option_list %}
-<sw-card
-    class="sw-property-create__option-list-empty-state"
-    position-identifier="sw-property-create-empty-state"
-    :title="$tc('sw-property.detail.cardTitle')"
->
-    <sw-empty-state
-        title=""
-        :subline="$tc('sw-property.detail.optionEmptyStateSubline')"
-        :absolute="false"
+{% block sw_product_bundle_create_form %}
+<div class="product-bundle-create-form">
+    <!-- Bundle Name Field -->
+    <sw-inherit-wrapper
+        v-model:value="productBundle.translations[languageId].name"
+        :has-parent="!!parentProduct.id"
+        :inherited-value="getInheritValue('translations', 'name')"
     >
-        <template #icon>
-            <img
-                :src="assetFilter('/administration/static/img/empty-states/products-empty-state.svg')"
-                alt=""
-            >
+        <template #content="props">
+            <sw-text-field
+                :map-inheritance="props"
+                :value="props.currentValue"
+                :disabled="props.isInherited || !allowEdit"
+                :label="$tc('sw-product-bundle.create.labelTitle')"
+                :required="isTitleRequired"
+                name="sw-field--bundle-name"
+                :error="productBundleNameError"
+                @update:value="props.updateCurrentValue"
+            />
         </template>
-    </sw-empty-state>
-</sw-card>
+    </sw-inherit-wrapper>
+
+    <!-- Add Products to Bundle Section -->
+    <sw-data-grid
+        :columns="columns"
+        :dataSource="availableProducts"
+        :selectionMode="'multiple'"
+        v-model:selection="selectedProducts"
+        :rowKey="product => product.id"
+    >
+        <template #column-actions="{ item }">
+            <sw-button
+                variant="danger"
+                @click="removeProductFromBundle(item)"
+                icon="default-action-delete"
+            >
+                {{ $tc('sw-product-bundle.create.removeProduct') }}
+            </sw-button>
+        </template>
+    </sw-data-grid>
+
+    <!-- Save / Cancel Buttons -->
+    <div class="product-bundle-create-form__buttons">
+        <sw-button
+            variant="primary"
+            :disabled="saveDisabled"
+            @click="saveBundle"
+        >
+            {{ $tc('sw-product-bundle.create.saveButton') }}
+        </sw-button>
+        <sw-button
+            variant="default"
+            @click="cancel"
+        >
+            {{ $tc('sw-product-bundle.create.cancelButton') }}
+        </sw-button>
+    </div>
+</div>
 {% endblock %}

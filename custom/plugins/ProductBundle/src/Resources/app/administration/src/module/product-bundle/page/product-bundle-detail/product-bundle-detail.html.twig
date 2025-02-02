@@ -1,0 +1,46 @@
+{% block sw_product_bundle_detail_content %}
+    <div class="product-bundle-detail">
+        <h2>{{ $tc('product_bundle.detail.title') }}</h2>
+
+        <sw-card>
+            <template #title>
+                {{ $tc('product_bundle.detail.formTitle') }}
+            </template>
+            <template #content>
+                <sw-text-field
+                    v-model="productBundle.title"
+                    label="{{ $tc('product_bundle.create.label.title') }}"
+                    :error="saveError ? $tc('product_bundle.create.error') : ''"
+                ></sw-text-field>
+            </template>
+        </sw-card>
+
+        <div class="buttons">
+            <sw-button variant="secondary" @click="cancel">
+                {{ $tc('global.default.cancel') }}
+            </sw-button>
+            <sw-button variant="primary" :loading="isLoading" @click="saveProductBundle">
+                {{ $tc('global.default.save') }}
+            </sw-button>
+            <sw-button variant="danger" :loading="isLoading" @click="deleteProductBundle">
+                {{ $tc('global.default.delete') }}
+            </sw-button>
+        </div>
+
+        <div v-if="saveSuccess" class="alert alert-success mt-4">
+            {{ $tc('product_bundle.create.success') }}
+        </div>
+
+        <div v-if="saveError" class="alert alert-danger mt-4">
+            {{ $tc('product_bundle.create.error') }}
+        </div>
+
+        <div v-if="deleteSuccess" class="alert alert-success mt-4">
+            {{ $tc('product_bundle.delete.success') }}
+        </div>
+
+        <div v-if="deleteError" class="alert alert-danger mt-4">
+            {{ $tc('product_bundle.delete.error') }}
+        </div>
+    </div>
+{% endblock %}
