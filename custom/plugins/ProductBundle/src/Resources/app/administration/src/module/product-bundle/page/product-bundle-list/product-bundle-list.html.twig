@@ -36,19 +36,16 @@
 
     <template #content>
         <div class="sw-generic-custom-entity-list__content">
-            <sw-entity-listing
+             <sw-entity-listing
                 v-if="!isLoading"
                 class="sw-generic-custom-entity-list__content-list"
                 :repository="productBundleRepository"
                 :items="productBundles"
-                :allow-inline-edit="true"
-                :allow-column-edit="false"
                 :columns="columns"
                 :is-loading="isLoading"
                 :allowEdit="true"
 
             />
-
             <sw-empty-state
                 v-else
                 class="sw-generic-custom-entity-list__content-empty-state"

@@ -2,16 +2,17 @@
 
 namespace Blaze\Core\Content\ProductBundleAssignedProducts;
 
-use Shopware\Core\Framework\DataAbstractionLayer\EntityDefinition;
+use Shopware\Core\Content\Product\ProductDefinition;
+use Blaze\Core\Content\ProductBundle\ProductBundleDefinition;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\FkField;
-use Shopware\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
-use Shopware\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\IdField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\IntField;
-use Shopware\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField;
 use Shopware\Core\Framework\DataAbstractionLayer\FieldCollection;
-use Blaze\Core\Content\ProductBundle\ProductBundleDefinition;
-use Shopware\Core\Content\Product\ProductDefinition;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityDefinition;
+use Shopware\Core\Framework\DataAbstractionLayer\Field\Flag\ApiAware;
+use Shopware\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
+use Shopware\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
+use Shopware\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField;
 
 class ProductBundleAssignedProductsDefinition extends EntityDefinition
 {
@@ -30,7 +31,7 @@ class ProductBundleAssignedProductsDefinition extends EntityDefinition
             (new FkField('product_id', 'productId', ProductDefinition::class))->addFlags(new Required()),
             (new IntField('quantity', 'quantity'))->addFlags(new Required()),
             new ManyToOneAssociationField('bundle', 'bundle_id', ProductBundleDefinition::class),
-            new ManyToOneAssociationField('product', 'product_id', ProductDefinition::class),
+            (new ManyToOneAssociationField('product', 'product_id', ProductDefinition::class, 'id'))->addFlags(new ApiAware()),
         ]);
     }
 }

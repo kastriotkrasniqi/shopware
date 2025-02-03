@@ -61,6 +61,10 @@ Shopware.Component.register('product-bundle-list', {
             }
         },
 
+        async onChangeLanguage() {
+            await this.loadProductBundle();
+        },
+
         onEditItem(item) {
             this.$router.push({ name: 'product.bundle.detail', params: { id: item.id } });
         },

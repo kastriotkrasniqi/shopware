@@ -1,3 +1,4 @@
+import template from './product-bundle-create.html.twig';
 const { Mixin } = Shopware;
 const { Criteria } = Shopware.Data;
 

@@ -1,1 +1,1 @@
-import './module/product-bundle'
+import "./module/product-bundle";

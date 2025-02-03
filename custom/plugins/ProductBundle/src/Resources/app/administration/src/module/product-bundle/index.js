@@ -30,17 +30,20 @@ Shopware.Module.register('product-bundle', {
         },
         create: {
             component: 'product-bundle-create',
-            path: 'create'
-            // meta: {
-            //     parentPath: 'product.bundle.list'
-            // }
+            path: 'create',
+            meta: {
+                parentPath: 'product.bundle.list'
+            }
         }
     },
 
     navigation: [{
+        id:"product-bundle-plugin",
         label: 'sw-product-bundle.general.mainMenuItemGeneral',
         color: '#ff3d58',
         path: 'product.bundle.list',
         parent: 'sw-catalogue',
+        icon: 'default-shopping-paper-bag-product',
+        position: 100
     }]
 });

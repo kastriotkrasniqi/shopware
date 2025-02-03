@@ -23,7 +23,10 @@
         "titleSidebarItemRefresh": "Refresh",
         "buttonAddProperty": "Add Product bundle",
         "textProperties" : "Product Bundles",
-        "buttonAddBundle": "Add product bundle"
+        "buttonAddBundle": "Add product bundle",
+        "emptyStateTitle": "No product bundles yet",
+        "emptyStateSubline": "Manage product bundles here"
+
       },
       "detail": {
         "textHeadline": "Product Bundle",
@@ -49,8 +52,17 @@
         "review2PointRatingText": "Acceptable",
         "review3PointRatingText": "Good",
         "review4PointRatingText": "Very good",
-        "review5PointRatingText": "Excellent"
-      }
+        "review5PointRatingText": "Excellent",
+        "quantity": "Quantity",
+        "products": "Products",
+        "general":"Bundle",
+        "selectProductPlaceholder":"Select product",
+        "selectProduct":"Product",
+         "productExistsError": "This product is already in the bundle.",
+         "product": "Product",
+          "deleteConfirmTitle": "Delete Bundle?",
+            "deleteConfirmMessage": "Are you sure you want to delete this product bundle? This action cannot be undone."
+     }
     },
     "sw-privileges": {
       "permissions": {
