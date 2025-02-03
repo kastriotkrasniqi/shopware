@@ -6,53 +6,50 @@ const { Criteria } = Shopware.Data;
 Shopware.Component.register('product-bundle-list', {
     template,
 
-    inject: [
-        'repositoryFactory',
-    ],
+    inject: ['repositoryFactory'],
 
-    mixins: [
-        Mixin.getByName('listing')
-    ],
+    mixins: [Mixin.getByName('listing')],
 
     metaInfo() {
-        return {
-            title: this.$createTitle()
-        };
+        return { title: this.$createTitle() };
     },
 
     data() {
         return {
-            productBundleRepository: this.repositoryFactory.create('product_bundle'),
-            productBundles: [],
-            columns: [
-                { property: 'name', label: 'Product Bundle Name', routerLink: 'product.bundle.detail', allowResize: true },
-            ],
             isLoading: false,
             total: 0,
+            productBundles: [],
             criteria: new Criteria(1, 25),
+            productBundleRepository: this.repositoryFactory.create('product_bundle'),
             languageId: Shopware.State.get('context').api.languageId,
+
             emptyStateTitle: this.$tc('sw-product-bundle.list.emptyStateTitle'),
             emptyStateSubline: this.$tc('sw-product-bundle.list.emptyStateSubline'),
         };
     },
 
+    computed: {
+        columns() {
+            return [
+                {
+                    property: 'name',
+                    label: this.$tc('sw-product-bundle.list.columnName'),
+                    routerLink: 'product.bundle.detail',
+                    allowResize: true,
+                },
+            ];
+        },
+    },
+
     methods: {
-        async getList() {
+        async fetchProductBundles() {
             this.isLoading = true;
             this.criteria.addAssociation('translations');
 
             try {
-                console.log("Fetching product bundles...");
                 const result = await this.productBundleRepository.search(this.criteria, Shopware.Context.api);
-
-                console.log("Product bundles fetched:", result);
-
-                if (result.length === 0) {
-                    console.warn("No product bundles found.");
-                }
-
-                this.total = result.total;
                 this.productBundles = result;
+                this.total = result.total;
             } catch (error) {
                 console.error("Error fetching product bundles:", error.response?.data || error.message);
                 this.productBundles = [];
@@ -61,26 +58,22 @@ Shopware.Component.register('product-bundle-list', {
             }
         },
 
-        async onChangeLanguage() {
-            await this.loadProductBundle();
+        async changeLanguage() {
+            this.languageId = Shopware.State.get('context').api.languageId;
+            await this.fetchProductBundles();
         },
 
-        onEditItem(item) {
-            this.$router.push({ name: 'product.bundle.detail', params: { id: item.id } });
-        },
-
-        onCreateNewProductBundle() {
+        createNewBundle() {
             this.$router.push({ name: 'product.bundle.create' });
         },
 
-        onSearch(searchTerm) {
+        searchProductBundles(searchTerm) {
             this.criteria.setTerm(searchTerm);
-            this.getList(); // You would fetch the list based on the updated criteria
-        }
-
+            this.fetchProductBundles();
+        },
     },
 
     created() {
-        this.getList();
+        this.fetchProductBundles();
     },
 });

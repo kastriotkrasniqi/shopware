@@ -6,7 +6,7 @@
             key="product_bundle"
             initial-search-type="product_bundle"
             :initial-search="term"
-            @search="onSearch"
+            @search="searchProductBundles"
         />
     </template>
 
@@ -54,7 +54,7 @@
             >
                 <template #actions>
                     <sw-button
-                        @click="onCreate"
+                        @click="createNewBundle"
                         variant="primary"
                     >
                         {{ $tc('sw-product-bundle.list.textCreateProductBundle') }}
