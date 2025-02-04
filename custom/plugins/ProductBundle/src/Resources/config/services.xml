@@ -6,15 +6,6 @@
 
     <services>
 
-        <service id="Blaze\Storefront\Controller\ProductBundleController" public="true">
-            <call method="setContainer">
-                <argument type="service" id="service_container"/>
-            </call>
-            <call method="setTwig">
-                 <argument type="service" id="twig"/>
-             </call>
-        </service>
-
         <service id="Blaze\Core\Content\ProductBundle\ProductBundleDefinition">
             <tag name="shopware.entity.definition" entity="product_bundle" />
         </service>
@@ -25,6 +16,23 @@
 
         <service id="Blaze\Core\Content\ProductBundleAssignedProducts\ProductBundleAssignedProductsDefinition">
             <tag name="shopware.entity.definition" entity="product_bundle_assigned_products" />
+        </service>
+
+
+        <service id="Blaze\Core\Subscriber\ProductLoadedSubscriber">
+            <argument type="service" id="product_bundle_assigned_products.repository"/>
+            <tag name="kernel.event_subscriber"/>
+        </service>
+
+        <service id="Blaze\Core\Controller\ProductBundleController" public="true">
+            <argument type="service" id="product_bundle_assigned_products.repository"/>
+            <argument type="service" id="product_bundle.repository"/>
+            <call method="setContainer">
+                <argument type="service" id="service_container"/>
+            </call>
+              <call method="setTwig">
+                <argument type="service" id="twig"/>
+            </call>
         </service>
 
     </services>

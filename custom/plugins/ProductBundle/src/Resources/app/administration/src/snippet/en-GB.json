@@ -1,4 +1,7 @@
 {
+    "listing" : {
+        "boxLabelBundle": "Bundle"
+    },
     "sw-product-bundle": {
       "general": {
         "mainMenuItemList": "Product bundles",

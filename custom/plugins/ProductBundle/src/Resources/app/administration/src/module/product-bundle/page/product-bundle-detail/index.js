@@ -28,9 +28,6 @@ Shopware.Component.register('product-bundle-detail', {
     },
 
     computed: {
-        productBundleName() {
-            return this.productBundle?.name;
-        },
         isProductInBundle() {
             return (productId) => {
                 return this.selectedProducts.some(product => product.productId === productId);

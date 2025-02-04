@@ -11,7 +11,7 @@
         <sw-button-process
             class="sw-generic-custom-entity-detail__save-action"
             :is-loading="isLoading"
-            :process-success="isSaveSuccessful"
+            :process-success="saveSuccess"
             variant="primary"
             :disabled="isLoading"
             @update:process-success="saveFinish"
@@ -45,7 +45,8 @@
     <template #content>
         <sw-card-view>
             <sw-card :title="$tc('sw-product-bundle.detail.general')">
-                <sw-text-field  v-model="productBundleName" @update:value="productBundleName = $event" label="Bundle Name" required  />
+                <sw-text-field  v-model="productBundle.name"
+                    @update:value="productBundle.name = $event" label="Bundle Name" required  />
             </sw-card>
             <sw-card :title="$tc('sw-product-bundle.detail.products')">
                 <div v-for="(product, index) in selectedProducts" :key="index" class="sw-product-bundle-product-row">

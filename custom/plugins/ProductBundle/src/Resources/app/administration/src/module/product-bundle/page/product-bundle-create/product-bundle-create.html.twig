@@ -1,59 +1,79 @@
-{% block sw_product_bundle_create_form %}
-<div class="product-bundle-create-form">
-    <!-- Bundle Name Field -->
-    <sw-inherit-wrapper
-        v-model:value="productBundle.translations[languageId].name"
-        :has-parent="!!parentProduct.id"
-        :inherited-value="getInheritValue('translations', 'name')"
-    >
-        <template #content="props">
-            <sw-text-field
-                :map-inheritance="props"
-                :value="props.currentValue"
-                :disabled="props.isInherited || !allowEdit"
-                :label="$tc('sw-product-bundle.create.labelTitle')"
-                :required="isTitleRequired"
-                name="sw-field--bundle-name"
-                :error="productBundleNameError"
-                @update:value="props.updateCurrentValue"
-            />
-        </template>
-    </sw-inherit-wrapper>
+<sw-page
+    class="sw-generic-custom-entity-detail"
+>
+         <template #smart-bar-header>
+        <h2 class="sw-generic-custom-entity-detail__title">
+         {{ $tc('sw-product-bundle.list.textProductBundles') }}
+        </h2>
+    </template>
 
-    <!-- Add Products to Bundle Section -->
-    <sw-data-grid
-        :columns="columns"
-        :dataSource="availableProducts"
-        :selectionMode="'multiple'"
-        v-model:selection="selectedProducts"
-        :rowKey="product => product.id"
-    >
-        <template #column-actions="{ item }">
-            <sw-button
-                variant="danger"
-                @click="removeProductFromBundle(item)"
-                icon="default-action-delete"
-            >
-                {{ $tc('sw-product-bundle.create.removeProduct') }}
-            </sw-button>
-        </template>
-    </sw-data-grid>
-
-    <!-- Save / Cancel Buttons -->
-    <div class="product-bundle-create-form__buttons">
-        <sw-button
+       <template #smart-bar-actions>
+        <sw-button-process
+            class="sw-generic-custom-entity-detail__save-action"
+            :is-loading="isLoading"
             variant="primary"
-            :disabled="saveDisabled"
-            @click="saveBundle"
+            :disabled="isLoading"
+            @click="createProductBundle"
         >
-            {{ $tc('sw-product-bundle.create.saveButton') }}
-        </sw-button>
-        <sw-button
-            variant="default"
-            @click="cancel"
-        >
-            {{ $tc('sw-product-bundle.create.cancelButton') }}
-        </sw-button>
-    </div>
-</div>
-{% endblock %}
+            {{ $tc('global.default.save') }}
+        </sw-button-process>
+
+
+    </template>
+
+
+    <template #content>
+        <sw-card-view>
+            <sw-card :title="$tc('sw-product-bundle.detail.general')">
+                <sw-text-field  v-model="productBundle.name" @update:value="productBundle.name = $event" label="Bundle Name" required  />
+            </sw-card>
+            <sw-card :title="$tc('sw-product-bundle.detail.products')">
+                <div v-for="(product, index) in productBundle.assignedProducts" :key="index" class="sw-product-bundle-product-row">
+                    <div class="sw-product-bundle-product-name">
+                        <span>{{ product.productName ?? 'N/A' }}</span> <!-- Product Name -->
+                    </div>
+                    <div class="sw-product-bundle-product-quantity">
+                        <sw-number-field
+                            v-model="product.quantity"
+                            :min="1"
+                            :required="true"
+                        />
+                    </div>
+                    <div class="sw-product-bundle-product-delete">
+                        <sw-button
+                            variant="danger"
+                            @click="deleteProductFromBundle(product.productId)"
+                        >
+                            {{ $tc('global.default.delete') }}
+                        </sw-button>
+                    </div>
+                </div>
+
+                <div class="sw-product-bundle-add-product">
+                   <sw-entity-single-select
+                        v-model="newProduct.productId"
+                        entity="product"
+                        :label="$tc('sw-product-bundle.detail.product')"
+                        :required="true"
+                         @update:value="newProduct.productId = $event"
+                        />
+                    <sw-number-field
+                        v-model="newProduct.quantity"
+                        :label="$tc('sw-product-bundle.detail.quantity')"
+                        :min="1"
+                        @update:value="newProduct.quantity = $event"
+                        :required="true"
+                    />
+                    <sw-button
+                        variant="primary"
+                        @click="addProductToBundle"
+                        :disabled="isProductInBundle(newProduct.productId)"
+                    >
+                        {{ $tc('global.default.add') }}
+                    </sw-button>
+                </div>
+            </sw-card>
+
+        </sw-card-view>
+    </template>
+    </sw-page>

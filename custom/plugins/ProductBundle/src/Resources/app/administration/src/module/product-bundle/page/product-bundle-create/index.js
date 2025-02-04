@@ -1,107 +1,143 @@
+import {  Mixin } from 'Shopware';
 import template from './product-bundle-create.html.twig';
-const { Mixin } = Shopware;
-const { Criteria } = Shopware.Data;
 
 Shopware.Component.register('product-bundle-create', {
     template,
 
-    inject: ['repositoryFactory'],
+    inject: ['repositoryFactory', 'context'],
 
-    mixins: [Mixin.getByName('listing')],
+    mixins: [
+        Mixin.getByName('notification')
+    ],
 
     data() {
         return {
             productBundleRepository: this.repositoryFactory.create('product_bundle'),
-            productBundle: null,
-            languageId: Shopware.State.get('context').api.languageId,
-            availableProducts: [], // Array of products available to add to the bundle
-            selectedProducts: [], // Array of selected products for the bundle
-            columns: [
-                {
-                    property: 'name',
-                    label: this.$tc('sw-product-bundle.create.productColumnName'),
-                    align: 'left'
-                },
-                {
-                    property: 'quantity',
-                    label: this.$tc('sw-product-bundle.create.productColumnQuantity'),
-                    align: 'center'
-                },
-                {
-                    property: 'actions',
-                    label: this.$tc('sw-product-bundle.create.actionsColumn'),
-                    align: 'center'
-                }
-            ],
+            productBundle: {
+                name: '',
+                assignedProducts: [],
+            },
             isLoading: false,
-            saveDisabled: false,
-            productBundleNameError: null
+            saveSuccess: false,
+            newProduct: {
+                productId: null,
+                quantity: 1,
+            },
         };
     },
 
     computed: {
-        saveDisabled() {
-            return !this.productBundle || this.isLoading || !this.selectedProducts.length;
+        isProductInBundle() {
+            return (productId) => {
+                return this.productBundle.assignedProducts.some(product => product.productId === productId);
+            };
         }
     },
-
     methods: {
-        async createNewBundle() {
+
+        async createProductBundle() {
             this.isLoading = true;
             try {
-                this.productBundle = this.productBundleRepository.create(Shopware.Context.api);
-                this.productBundle.translations = this.productBundle.translations || {};
-                this.$set(this.productBundle.translations, this.languageId, { name: '' });
-                await this.fetchAvailableProducts();
-            } catch (error) {
-                console.error('Error creating bundle:', error);
-            } finally {
-                this.isLoading = false;
-            }
-        },
+                const bundle = this.productBundleRepository.create(Shopware.Context.api);
 
-        async fetchAvailableProducts() {
-            const criteria = new Criteria(1, 25);
-            const result = await this.productBundleRepository.search(criteria, Shopware.Context.api);
-            this.availableProducts = result;
-        },
+                bundle.name = this.productBundle.name;
 
-        addProductToBundle(product) {
-            if (!this.selectedProducts.includes(product)) {
-                this.selectedProducts.push(product);
-            }
-        },
+                bundle.assignedProducts = await Promise.all(this.productBundle.assignedProducts.map(async (product) => {
+                    const assignedProductRepository = this.repositoryFactory.create('product_bundle_assigned_products');
+                    const assignedProduct = assignedProductRepository.create(Shopware.Context.api);
 
-        removeProductFromBundle(product) {
-            const index = this.selectedProducts.indexOf(product);
-            if (index !== -1) {
-                this.selectedProducts.splice(index, 1);
-            }
-        },
+                    assignedProduct.bundleId = bundle.id;
+                    assignedProduct.productId = product.productId;
+                    assignedProduct.quantity = product.quantity;
 
-        async saveBundle() {
-            this.isLoading = true;
-            try {
-                this.productBundle.products = this.selectedProducts.map(product => ({
-                    productId: product.id,
-                    quantity: 1
+                    return assignedProduct;
                 }));
 
-                await this.productBundleRepository.save(this.productBundle, Shopware.Context.api);
+                await this.productBundleRepository.save(bundle, Shopware.Context.api);
+
+                this.saveSuccess = true;
                 this.$router.push({ name: 'product.bundle.list' });
             } catch (error) {
-                console.error('Error saving bundle:', error);
+                console.error("Error saving product bundle:", error);
+                this.createNotificationError({
+                    message: this.$tc('sw-product-bundle.detail.saveError')
+                });
             } finally {
                 this.isLoading = false;
             }
         },
 
-        cancel() {
-            this.$router.push({ name: 'product.bundle.list' });
-        }
-    },
+        async addProductToBundle() {
+            const existingProduct = this.productBundle.assignedProducts.find(product => product.productId === this.newProduct.productId);
 
-    created() {
-        this.createNewBundle();
+            if (existingProduct) {
+                this.createNotificationError({
+                    message: this.$tc('sw-product-bundle.detail.productExistsError')
+                });
+                return;
+            }
+
+            try {
+                const productRepository = this.repositoryFactory.create('product');
+                const product = await productRepository.get(this.newProduct.productId, {
+                    ...Shopware.Context.api,
+                    languageId: Shopware.Context.api.languageId // Pass the correct languageId
+                });
+
+                if (!product) {
+                    this.createNotificationError({
+                        message: this.$tc('sw-product-bundle.detail.productNotFoundError')
+                    });
+                    return;
+                }
+
+                console.log('productiiii:', product);
+
+                this.productBundle.assignedProducts.push({
+                    productName: product.translated.name,
+                    productId: this.newProduct.productId,
+                    quantity: this.newProduct.quantity,
+                });
+                this.newProduct = {
+                    productId: null,
+                    quantity: 1,
+                };
+
+            } catch (error) {
+                console.error("Error adding product to bundle:", error);
+                this.createNotificationError({
+                    message: this.$tc('sw-product-bundle.detail.productAddError')
+                });
+            }
+        },
+
+        async deleteProductFromBundle(productId) {
+            try {
+                const assignedProducts = this.productBundle.assignedProducts.filter(product => product.productId === productId);
+
+                if (!assignedProducts.length) {
+                    this.createNotificationError({
+                        message: this.$tc('sw-product-bundle.detail.productNotFoundError')
+                    });
+                    return;
+                }
+
+                this.productBundle.assignedProducts = this.productBundle.assignedProducts.filter(product => product.productId !== productId);
+
+
+            } catch (error) {
+                console.error("Error deleting product from bundle:", error);
+                this.createNotificationError({
+                    message: this.$tc('sw-product-bundle.detail.productDeleteError')
+                });
+            }
+        },
+
+
+    },
+    metaInfo() {
+        return {
+            title: this.$createTitle()
+        };
     }
 });

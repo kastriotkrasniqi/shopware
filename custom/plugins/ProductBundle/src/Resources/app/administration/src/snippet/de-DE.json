@@ -1,4 +1,7 @@
 {
+    "listing" : {
+        "boxLabelBundle": "Bundle"
+    },
     "product-bundle": {
         "general": {
             "mainMenuItemGeneral": "My custom module",
